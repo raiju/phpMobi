@@ -8,3 +8,4 @@ define("NO_ENCRYPTION", 0);
 
 define("MOBIPOCKET_BOOK", 2);
 define("CP1252", 1252);
+define("UTF8", 65001);

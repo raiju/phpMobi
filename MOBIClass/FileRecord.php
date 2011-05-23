@@ -19,8 +19,12 @@ class FileRecord extends FileObject {
 		$this->record = $record;
 	}
 
+	public function getByteLength(){
+		return $this->getLength();
+	}
+
 	public function getLength(){
-		return $this->record->length();
+		return $this->record->getLength();
 	}
 
 	public function get(){

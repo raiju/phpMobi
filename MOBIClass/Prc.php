@@ -42,28 +42,33 @@ class Prc extends FileElement {
 			$attr = new FileByte();
 			$uniqueID = new FileTri($i);
 			
-			$this->elements["recordList"]->add($i, new FileElement(array(
+			$this->elements["recordList"]->add("Rec".$i, new FileElement(array(
 				"offset"=>$offset,
 				"attribute"=>$attr,
 				"uniqueID"=>$uniqueID
 			)));
 			
-			$this->elements["records"]->add($i, $record);
+			$this->elements["records"]->add("Rec".$i, $record);
 			$i++;
 		}
 
 		$this->updateOffsets($records);
 	}
 
+	public function getByteLength(){
+		throw new Exception("Test");
+	}
+
 	public function updateOffsets($records){
 		$base = $this->offsetToEntry("records");
 
 		$i = 0;
+		
 		foreach($records as $record){
-			$el = $this->elements["recordList"]->get($i);
-
-			$local = $this->elements["records"]->offsetToEntry($i);
-
+			$el = $this->elements["recordList"]->get("Rec".$i);
+			
+			$local = $this->elements["records"]->offsetToEntry("Rec".$i);
+			
 			$el->get("offset")->set($base+$local);
 
 			$i++;

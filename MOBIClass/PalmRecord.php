@@ -10,7 +10,7 @@ class PalmRecord extends FileObject {
 	 */
 	private $elements;
 
-	public function __construct($settings, $records, $textRecords, $textLength){
+	public function __construct($settings, $records, $textRecords, $textLength, $images){
 		$this->elements = new FileElement(array(
 			"compression"=>new FileShort(),
 			"unused"=>new FileShort(),
@@ -81,7 +81,11 @@ class PalmRecord extends FileObject {
 				$i++;
 			}
 		}
-		$this->elements->get("firstNonBookIndex")->set($textRecords+2);
+
+		if($images > 0){
+			$this->elements->get("firstImageIndex")->set($textRecords+2);
+		}
+		$this->elements->get("firstNonBookIndex")->set($textRecords+2+$images);
 		$this->elements->get("reserved")->set(str_pad("", 40, chr(255), STR_PAD_RIGHT));
 		$this->elements->get("exthRecordCount")->set($i);
 		$this->elements->set("exthRecords", $exthElems);
@@ -97,6 +101,10 @@ class PalmRecord extends FileObject {
 		$this->elements->get("fullNameLength")->set(strlen($settings->get("title")));
 		$this->elements->get("fullName")->set($settings->get("title"));
 		$this->elements->get("textLength")->set($textLength);
+	}
+
+	public function getByteLength(){
+		return $this->getLength();
 	}
 
 	public function getLength(){

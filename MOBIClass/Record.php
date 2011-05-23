@@ -32,7 +32,23 @@ class Record extends FileObject {
 	}
 
 	public function compress($compression_method){
-		//TODO: Implement compression function
+		switch($compression_method){
+			case NO_COMPRESSION:
+				//Finished!
+				break;
+			case PALMDOC_COMPRESSION:
+				throw new Exception("Not implemented yet");
+				break;
+			case HUFF:
+				throw new Exception("Not implemented yet");
+				break;
+			default:
+				throw new Exception("Invalid argument");
+		}
+	}
+
+	public function getByteLength(){
+		return $this->getLength();
 	}
 
 	/**

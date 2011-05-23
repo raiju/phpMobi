@@ -151,7 +151,6 @@ class Readability
 	public function init()
 	{
 		$this->removeScripts($this->dom);
-		//die($this->getInnerHTML($this->dom->documentElement));
 
 		// Assume successful outcome
 		$this->success = true;
@@ -288,6 +287,9 @@ class Readability
 		* In some cases a body element can't be found (if the HTML is totally hosed for example)
 		* so we create a new body node and append it to the document.
 		*/
+		if($this->dom->documentElement == null){
+			throw new Exception("No document element");
+		}
 		if ($this->body == null)
 		{
 			$this->body = $this->dom->createElement('body');

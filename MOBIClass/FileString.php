@@ -32,6 +32,10 @@ class FileString extends FileObject {
 		}
 	}
 
+	public function getByteLength(){
+		return $this->getLength();
+	}
+
 	public function getLength(){
 		if($this->forcedLength >= 0){
 			return $this->forcedLength;

@@ -31,7 +31,7 @@ class RecordFactory {
 		$size = $this->settings->get("recordSize");
 		$compression = $this->settings->get("compression");
 
-		$dataEntries = str_split($data, $size);
+		$dataEntries = mb_str_split($data, $size);
 
 		for($i = 0, $len = sizeof($dataEntries); $i < $len; $i++){
 			$records[$i] = new Record($dataEntries[$i]);
@@ -95,5 +95,21 @@ class RecordFactory {
 		$out .= "}";
 		return $out;
 	}
+}
+function mb_str_split($string, $split_length = 1){
+	mb_internal_encoding('UTF-8');
+	mb_regex_encoding('UTF-8');
+
+	$split_length = ($split_length <= 0) ? 1 : $split_length;
+
+	$mb_strlen = mb_strlen($string, 'utf-8');
+
+	$array = array();
+
+	for($i = 0; $i < $mb_strlen; $i += $split_length){
+		$array[] = mb_substr($string, $i, $split_length);
+	}
+
+	return $array;
 }
 ?>

@@ -10,28 +10,10 @@ MobiPocket is an eBook format created by Mobipocket SA. This tool also
 uses a php readability port made by
 link:http://www.keyvan.net/2010/08/php-readability/[Keyvan Minoukadeh].
 
-Code example
+Code sample
 ------------
 
-See index.php for an example (loads up a local html file). The following
-code is used:
-
-**********
-$options = array(
-	"title"=>"GROUP BY vs ORDER BY",
-	"author"=>"thetricky.net",
-	"subject"=>"MySql"
-);
-
-$mobi = new MOBI();
-$mobi->setFileSource("test/test.html");
-$mobi->setOptions($options);
-
-$mobi->save("test/test.mobi");
-**********
-
-The options array contains the metadata (if possible, always specify
-title, which is sometimes used as identifier in Mobi readers).
+See index.php for an example of using this program.
 
 Implementation
 --------------

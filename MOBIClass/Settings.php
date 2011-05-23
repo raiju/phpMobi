@@ -39,7 +39,7 @@ class Settings {
 			"mobiIdentifier"=>"MOBI",
 			"mobiHeaderLength"=>0xe8,
 			"mobiType"=>MOBIPOCKET_BOOK,
-			"textEncoding"=>CP1252,
+			"textEncoding"=>UTF8,
 			"uniqueID"=>rand(),
 			"fileVersion"=>6,
 			"locale"=>0x09,
