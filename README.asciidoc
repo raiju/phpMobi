@@ -20,4 +20,47 @@ Implementation
 
 This code was implemented while reverse-engineering the MobiPocket format.
 Therefore this code absolutely isn't optimized for speed, but rather for
-easy changes, as getting it to produce valid files was quite fiddly.
+easy changes, as getting it to produce valid files was quite fiddly
+
+Features
+--------
+
+Modular content provider system:
+	Adding a new data source can be done by extending the ContentProvider
+	class. See the OnlineArticle class for a simple but complete
+	implementation of such a system
+
+Image support:
+	By default, the online article downloader (and any other content
+	provider that supports images) will download images and integrate them
+	into the mobi file.
+
+Partial UTF-8 support:
+	In practice UTF-8 just works, but theoretically there might be some
+	problems (see missing features).
+
+Missing Features
+----------------
+
+Compression:
+	This probably won't be implemented (or if it is, only to serve as a
+	reference of the format) as PHP really isn't made for this kind of
+	work.
+
+Different eBook types:
+	MobiPocket supports other formats/layouts, such as newspaper-like
+	formats. At the moment only the book layout has been implemented.
+
+Full UTF-8 support:
+	UTF-8 should work most of the time, but there might be some problems
+	when the character is split over two "frames". In practice I've never
+	encountered this problem and special characters (and international
+	characters, such as japanese letters) are shown without a problem on
+	my Kindle.
+
+Support for CHUNKED Http transfer:
+	As fopen with http doesn't always work (depends on the configuration
+	of your hosting), there is an HTTP library to replace this missing
+	functionality. However CHUNKED transfer mode hasn't been implemented.
+	This means the page will have some "parasites" in it. But the contents
+	stay quite readable.

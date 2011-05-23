@@ -79,24 +79,29 @@ class OnlineArticle extends ContentProvider {
 		$imgElements = $dom->getElementsByTagName('img');
 		foreach($imgElements as $img) {
 			$src = $img->getAttribute("src");
-
+			
+			$is_root = false;
+			if(substr($src, 0, 1) == "/"){
+				$is_root = true;
+			}
+			
 			$parsed = parse_url($src);
 
 			if(!isset($parsed["host"])){
-				$src = http_build_url($url, $parsed, HTTP_URL_JOIN_PATH);
+				if($is_root){
+					$src = http_build_url($url, $parsed, HTTP_URL_REPLACE);
+				}else{
+					$src = http_build_url($url, $parsed, HTTP_URL_JOIN_PATH);
+				}
 			}
-
 			$img->setAttribute("src", "");
 			if(isset($savedImages[$src])){
 				$img->setAttribute("recindex", $savedImages[$src]);
 			}else{
 				$image = ImageHandler::DownloadImage($src);
-
 				
 				if($image !== false){
-
 					$images[$this->imgCounter] = new FileRecord(new Record($image));
-					imagedestroy($imgFile);
 
 					$img->setAttribute("recindex", $this->imgCounter);
 					$savedImages[$src] = $this->imgCounter;

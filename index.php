@@ -4,7 +4,7 @@ if(isset($_GET["download"])){
 	include("MOBIClass/MOBI.php");
 
 	//Set the url (note that this file isn't created for eBook viewing, it's just
-	//to demonstrate that you can give (almost) any page and get it working on
+	//to demonstrate that you can give (almost) any news article and get it working on
 	//your eBook reader)
 	$url = "http://thetricky.net/mySQL/GROUP%20BY%20vs%20ORDER%20BY";
 	$recognize = false;
