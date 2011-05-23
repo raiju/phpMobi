@@ -1,0 +1,11 @@
+phpMobi file generator
+======================
+
+phpMobi is a tool that can generate .mobi files from a valid html file
+written in php. While this was more meant as an experiment, this tool
+works quite well and can be used to generate mobipocket files from most
+websites.
+
+MobiPocket is an eBook format created by Mobipocket SA. This tool also
+uses a php readability port made by
+link:http://www.keyvan.net/2010/08/php-readability/[Keyvan Minoukadeh].
