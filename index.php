@@ -10,9 +10,9 @@ include("MOBIClass/MOBI.php");
 	<body>
 		<?php
 		$options = array(
-			"title"=>"The Adventures of Herlock Sholmes",
-			"author"=>"Conan Doyle",
-			"subject"=>"Detective"
+			"title"=>"GROUP BY vs ORDER BY",
+			"author"=>"thetricky.net",
+			"subject"=>"MySql"
 		);
 
 		$mobi = new MOBI();
