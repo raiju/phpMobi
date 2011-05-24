@@ -20,7 +20,7 @@ See index.php for an example of using this program.
 
 Sending an online article as a download:
 
-[source,php]
+[source]
 ------------------------------------------------
 //Create the MOBI object
 $mobi = new MOBI();
@@ -40,7 +40,7 @@ $mobi->download($title.".mobi");
 
 Using a previously generated/downloaded html file (will not download any images!):
 
-[source,php]
+[source]
 ------------------------------------------------
 $data = "<html>...</html>";
 $options = array(
