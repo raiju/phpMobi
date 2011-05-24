@@ -18,12 +18,50 @@ Code sample
 
 See index.php for an example of using this program.
 
+.Sending an online article as a download
+[php]
+code~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Create the MOBI object
+$mobi = new MOBI();
+
+//Set the content provider
+$content = new OnlineArticle("URL");
+$mobi->setContentProvider($content);
+
+//Get title and make it a 12 character long url-safe filename
+$title = $mobi->getTitle();
+if($title === false) $title = "file";
+$title = urlencode(str_replace(" ", "_", strtolower(substr($title, 0, 12))));
+
+//Send the mobi file as download
+$mobi->download($title.".mobi");
+code~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Using a previously generated/downloaded html file (will not download any images!)
+[php]
+code~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$data = "<html>...</html>";
+$options = array(
+	"title" => "Local document",
+	"author" => "Author name",
+	"subject" => "Subject"
+);
+//Create the MOBI object
+$mobi = new MOBI();
+
+$mobi->setData($data);
+$mobi->setOptions($options);
+
+//Send the mobi file as download
+$mobi->save($options["title"].".mobi");
+code~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Implementation
 --------------
 
 This code was implemented while reverse-engineering the MobiPocket format.
 Therefore this code absolutely isn't optimized for speed, but rather for
-easy changes, as getting it to produce valid files was quite fiddly
+easy changes, as getting it to produce valid files was quite fiddly.
 
 Features
 --------
@@ -56,14 +94,7 @@ Different eBook types:
 
 Full UTF-8 support:
 	UTF-8 should work most of the time, but there might be some problems
-	when the character is split over two "frames". In practice I've never
+	when the character is split over two "records". In practice I've never
 	encountered this problem and special characters (and international
 	characters, such as japanese letters) are shown without a problem on
 	my Kindle.
-
-Support for CHUNKED Http transfer:
-	As fopen with http doesn't always work (depends on the configuration
-	of your hosting), there is an HTTP library to replace this missing
-	functionality. However CHUNKED transfer mode hasn't been implemented.
-	This means the page will have some "parasites" in it. But the contents
-	stay quite readable.
