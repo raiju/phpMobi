@@ -19,22 +19,21 @@ Code sample
 See index.php for an example of using this program.
 
 Sending an online article as a download:
+
   //Create the MOBI object
   $mobi = new MOBI();
-  
   //Set the content provider
   $content = new OnlineArticle("URL");
   $mobi->setContentProvider($content);
-  
   //Get title and make it a 12 character long url-safe filename
   $title = $mobi->getTitle();
   if($title === false) $title = "file";
   $title = urlencode(str_replace(" ", "_", strtolower(substr($title, 0, 12))));
-  
   //Send the mobi file as download
   $mobi->download($title.".mobi");
 
 Using a previously generated/downloaded html file (will not download any images!):
+
   $data = "<html>...</html>";
   $options = array(
   	"title" => "Local document",
@@ -43,11 +42,10 @@ Using a previously generated/downloaded html file (will not download any images!
   );
   //Create the MOBI object
   $mobi = new MOBI();
-  
+  //Set the data
   $mobi->setData($data);
   $mobi->setOptions($options);
-  
-  //Send the mobi file as download
+  //Save the mobi file locally
   $mobi->save($options["title"].".mobi");
 
 Implementation
