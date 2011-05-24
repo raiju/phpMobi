@@ -81,15 +81,20 @@ Missing Features
 Compression:
 	This probably won't be implemented (or if it is, only to serve as a
 	reference of the format) as PHP really isn't made for this kind of
-	work.
+	work and the compression isn't really useful anymore with current
+	download speeds and storage space.
 
 Different eBook types:
 	MobiPocket supports other formats/layouts, such as newspaper-like
 	formats. At the moment only the book layout has been implemented.
 
 Full UTF-8 support:
-	UTF-8 should work most of the time, but there might be some problems
-	when the character is split over two "records". In practice I've never
-	encountered this problem and special characters (and international
-	characters, such as japanese letters) are shown without a problem on
-	my Kindle.
+	UTF-8 should work most of the time (it worked every time I
+	tested it), but there might be some problems when the character
+	is split over two "records". In practice I've never encountered
+	this problem and special characters (and international characters,
+	such as japanese letters) are shown without a problem on my Kindle.
+
+License
+-------
+This code is released under the Apache license (version 2.0)
