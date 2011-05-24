@@ -7,9 +7,10 @@
  */
 class CharacterEntities {
 	public static function convert($str){
+		//Assume the encoding is UTF-8 -> output is UTF-8
 		return $str;
-		//return utf8_encode(utf8_encode($str));
-		//return CharacterEntities::translateUTF8ToWindowsCP1252($str);
+		//return utf8_encode($str);
+		//Convert to CP1252
 		list($from, $to) = CharacterEntities::generateTables();
 		return str_replace($from, $to, $str);
 	}

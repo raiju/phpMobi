@@ -83,8 +83,6 @@ class Http{
 		stream_set_timeout($fp, 0, $timeout * 1000);
 
 		fputs($fp, $req);
-		//while (($part = fread($fp, 10000)) !== false) $ret .= $part;
-		//TODO: Correct for chunked transfer encoding (either remove the offending parts, or implement in another way (add chunks)
 		$ret .= stream_get_contents($fp);
 		fclose($fp);
 
