@@ -6,6 +6,9 @@ written in php. While this was more meant as an experiment, this tool
 works quite well and can be used to generate mobipocket files from most
 websites.
 
+Do NOT use this on a public web server. This script is relatively heavy,
+and absolutely not tested against malicious inputs.
+
 MobiPocket is an eBook format created by Mobipocket SA. This tool also
 uses a php readability port made by
 link:http://www.keyvan.net/2010/08/php-readability/[Keyvan Minoukadeh].
@@ -28,7 +31,7 @@ Features
 Modular content provider system:
 	Adding a new data source can be done by extending the ContentProvider
 	class. See the OnlineArticle class for a simple but complete
-	implementation of such a system
+	implementation of such a system.
 
 Image support:
 	By default, the online article downloader (and any other content
