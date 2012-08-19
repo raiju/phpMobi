@@ -18,6 +18,7 @@ require_once(dirname(__FILE__).'/FileTri.php');
 require_once(dirname(__FILE__).'/Http.php');
 require_once(dirname(__FILE__).'/http_build_url.php');
 require_once(dirname(__FILE__).'/ImageHandler.php');
+require_once(dirname(__FILE__).'/MOBIFile.php');
 require_once(dirname(__FILE__).'/OnlineArticle.php');
 require_once(dirname(__FILE__).'/PalmRecord.php');
 require_once(dirname(__FILE__).'/Prc.php');
@@ -83,7 +84,7 @@ class MOBI {
 	 */
 	public function setContentProvider($content){
 		$this->setOptions($content->getMetaData());
-		$this->images = $content->getImages();
+		$this->setImages($content->getImages());
 		$this->setData($content->getTextData());
 	}
 

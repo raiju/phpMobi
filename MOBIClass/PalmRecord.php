@@ -83,7 +83,7 @@ class PalmRecord extends FileObject {
 		}
 
 		if($images > 0){
-			$this->elements->get("firstImageIndex")->set($textRecords+2);
+			$this->elements->get("firstImageIndex")->set($textRecords+1);
 		}
 		$this->elements->get("firstNonBookIndex")->set($textRecords+2+$images);
 		$this->elements->get("reserved")->set(str_pad("", 40, chr(255), STR_PAD_RIGHT));
