@@ -40,7 +40,7 @@ require_once(dirname(__FILE__).'/Settings.php');
  * $mobi->setFileSource($file);			//Load a local file without any extra changes
  * $mobi->setData($data);				//Load data
  *
- * //If you want, you can set some optional settings
+ * //If you want, you can set some optional settings (see Settings.php for all recognized settings)
  * $options = array(
  *		"title"=>"Insert title here",
  *		"author"=>"Author"
