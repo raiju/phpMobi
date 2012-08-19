@@ -5,7 +5,7 @@ phpMobi is a php script that can generate .mobi files from valid html
 files. While this was meant as an experiment, this tool works quite
 well and can be used to generate mobipocket files from most news articles.
 
-Do NOT use this on a public web server. If you do, make sure the input is
+IMPORTANT: Do NOT use this on a public web server. If you do, make sure the input is
 controlled (this script is absolutely not made to resist malicious inputs)
 and that the server isn't overwhelmed by the requests as this script is
 relatively heavy. Also, as no official documentation is available, there
@@ -13,8 +13,7 @@ might be some bugs/problems in the generated files, but until now I haven't
 encountered any problems.
 
 MobiPocket is an eBook format created by Mobipocket SA. This tool also
-uses a php readability port made by
-link:http://www.keyvan.net/2010/08/php-readability/[Keyvan Minoukadeh].
+uses a php readability port made by [Keyvan Minoukadeh](http://www.keyvan.net/2010/08/php-readability/).
 
 Code sample
 ------------
@@ -23,33 +22,41 @@ See index.php for an example of using this program.
 
 Sending an online article as a download:
 
-  //Create the MOBI object
-  $mobi = new MOBI();
-  //Set the content provider
-  $content = new OnlineArticle("URL");
-  $mobi->setContentProvider($content);
-  //Get title and make it a 12 character long url-safe filename
-  $title = $mobi->getTitle();
-  if($title === false) $title = "file";
-  $title = urlencode(str_replace(" ", "_", strtolower(substr($title, 0, 12))));
-  //Send the mobi file as download
-  $mobi->download($title.".mobi");
+	//Create the MOBI object
+	$mobi = new MOBI();
+	
+	//Set the content provider
+	$content = new OnlineArticle("URL");
+	$mobi->setContentProvider($content);
+	
+	//Get title and make it a 12 character long url-safe filename
+	$title = $mobi->getTitle();
+	if($title === false)
+		$title = "file";
+	
+	$title = urlencode(str_replace(" ", "_", strtolower(substr($title, 0, 12))));
+	
+	//Send the mobi file as download
+	$mobi->download($title.".mobi");
 
 Using a previously generated/downloaded html file (will not download any images!):
 
-  $data = "<html>...</html>";
-  $options = array(
-  	"title" => "Local document",
-  	"author" => "Author name",
-  	"subject" => "Subject"
-  );
-  //Create the MOBI object
-  $mobi = new MOBI();
-  //Set the data
-  $mobi->setData($data);
-  $mobi->setOptions($options);
-  //Save the mobi file locally
-  $mobi->save($options["title"].".mobi");
+	$data = "<html>...</html>";
+	$options = array(
+		"title" => "Local document",
+	  	"author" => "Author name",
+	  	"subject" => "Subject"
+	);
+	
+	//Create the MOBI object
+	$mobi = new MOBI();
+	
+	//Set the data
+	$mobi->setData($data);
+	$mobi->setOptions($options);
+	
+	//Save the mobi file locally
+	$mobi->save($options["title"].".mobi");
 
 Implementation
 --------------
