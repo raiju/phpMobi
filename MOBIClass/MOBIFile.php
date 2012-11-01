@@ -1,6 +1,9 @@
 <?php
 /**
  * This is the way MOBI files should be created if you want all features (TOC, images).
+ *
+ * File modified by Dawson for use in eBook Creator
+ * Added pagebreaks and a setting to remove table of contents.
  */
 
 class MOBIFile extends ContentProvider {
@@ -8,8 +11,9 @@ class MOBIFile extends ContentProvider {
 	const H2 = 1;
 	const H3 = 2;
 	const IMAGE = 3;
+	const PAGEBREAK = 4;
 	
-	private $settings = array("title" => "Unknown Title");
+	private $settings = array("title" => "Unknown Title", "toc" => true);
 	private $parts = array();
 	private $images = array();
 	
@@ -23,12 +27,12 @@ class MOBIFile extends ContentProvider {
 		
 		list($text, $entries) = $this->generateText();
 		
-		//Generate TOC to get the right length
-		$toc = $this->generateTOC($entries);
-		
-		//Generate the real TOC
-		$toc = $this->generateTOC($entries, strlen($prefix)+strlen($toc)+strlen($title));
-		
+		if($this->settings["toc"]) {
+			$toc = $this->generateTOC($entries); //Generate TOC to get the right length
+			$toc = $this->generateTOC($entries, strlen($prefix)+strlen($toc)+strlen($title)); //Generate the real TOC
+			$toc .= '<mbp:pagebreak/>';
+		}
+
 		$suffix = "</body></html>";
 		
 		return $prefix.$toc.$title.$text.$suffix;
@@ -48,6 +52,9 @@ class MOBIFile extends ContentProvider {
 			switch($type){
 				case self::PARAGRAPH:
 					$str .= "<p>".$data."</p>";
+					break;
+				case self::PAGEBREAK:
+					$str .= '<mbp:pagebreak/>';
 					break;
 				case self::H2:
 					$entries[] = array("level" => 2, "position" => strlen($str), "title" => $data);
@@ -134,6 +141,10 @@ class MOBIFile extends ContentProvider {
 		$this->parts[] = array(self::H3, $title);
 	}
 	
+	public function appendPageBreak() {
+		$this->parts[] = array(self::PAGEBREAK);
+	}
+
 	/**
 	 * Append an image.
 	 * @param resource $img An image file (for example, created by `imagecreate`)
