@@ -1,6 +1,9 @@
 <?php
 /**
  * This is the way MOBI files should be created if you want all features (TOC, images).
+ *
+ * File modified by Dawson for use in eBook Creator
+ * Added pagebreaks and a setting to remove table of contents.
  */
 
 class MOBIFile extends ContentProvider {
@@ -8,8 +11,9 @@ class MOBIFile extends ContentProvider {
 	const H2 = 1;
 	const H3 = 2;
 	const IMAGE = 3;
+	const PAGEBREAK = 4;
 	
-	private $settings = array("title" => "Unknown Title");
+	private $settings = array("title" => "Unknown Title", "toc" => true);
 	private $parts = array();
 	private $images = array();
 	
@@ -23,12 +27,12 @@ class MOBIFile extends ContentProvider {
 		
 		list($text, $entries) = $this->generateText();
 		
-		//Generate TOC to get the right length
-		$toc = $this->generateTOC($entries);
-		
-		//Generate the real TOC
-		$toc = $this->generateTOC($entries, strlen($prefix)+strlen($toc)+strlen($title));
-		
+		if($this->settings["toc"]) {
+			$toc = $this->generateTOC($entries); //Generate TOC to get the right length
+			$toc = $this->generateTOC($entries, strlen($prefix)+strlen($toc)+strlen($title)); //Generate the real TOC
+			$toc .= '<mbp:pagebreak/>';
+		}
+
 		$suffix = "</body></html>";
 		
 		return $prefix.$toc.$title.$text.$suffix;
@@ -49,9 +53,13 @@ class MOBIFile extends ContentProvider {
 				case self::PARAGRAPH:
 					$str .= "<p>".$data."</p>";
 					break;
+				case self::PAGEBREAK:
+					$str .= '<mbp:pagebreak/>';
+					break;
 				case self::H2:
 					$entries[] = array("level" => 2, "position" => strlen($str), "title" => $data);
-					$str .= "<h2>".$data."</h2>";
+					$title = urlencode(ereg_replace("[^A-Za-z0-9]", "", strtolower($data)));
+					$str .= "<h2 id='" . $title . "'>".$data."</h2>";
 					break;
 				case self::H3:
 					$entries[] = array("level" => 3, "position" => strlen($str), "title" => $data);
@@ -75,8 +83,8 @@ class MOBIFile extends ContentProvider {
 		$toc .= "<blockquote><table summary='Table of Contents'><col/><tbody>";
 		for($i = 0, $len = sizeof($entries); $i < $len; $i++){
 			$entry = $entries[$i];
-			$pos = str_pad($entry["position"]+$base, 10, "0", STR_PAD_LEFT);
-			$toc .= "<tr><td><a filepos='".$pos."'>".$entry["title"]."</a></td></tr>";
+			$title = urlencode(ereg_replace("[^A-Za-z0-9]", "", strtolower($entry["title"])));
+			$toc .= "<tr><td><a href='#".$title."'>".$entry["title"]."</a></td></tr>";
 		}
 		return $toc."</tbody></b></table></blockquote>";
 	}
@@ -134,6 +142,10 @@ class MOBIFile extends ContentProvider {
 		$this->parts[] = array(self::H3, $title);
 	}
 	
+	public function appendPageBreak() {
+		$this->parts[] = array(self::PAGEBREAK);
+	}
+
 	/**
 	 * Append an image.
 	 * @param resource $img An image file (for example, created by `imagecreate`)
