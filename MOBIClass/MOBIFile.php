@@ -49,6 +49,7 @@ class MOBIFile extends ContentProvider {
 		
 		for($i = 0; $i < sizeof($this->parts); $i++){
 			list($type, $data) = $this->parts[$i];
+			$id = "title_".$i;
 			switch($type){
 				case self::PARAGRAPH:
 					$str .= "<p>".$data."</p>";
@@ -57,13 +58,12 @@ class MOBIFile extends ContentProvider {
 					$str .= '<mbp:pagebreak/>';
 					break;
 				case self::H2:
-					$entries[] = array("level" => 2, "position" => strlen($str), "title" => $data);
-					$title = urlencode(ereg_replace("[^A-Za-z0-9]", "", strtolower($data)));
-					$str .= "<h2 id='" . $title . "'>".$data."</h2>";
+					$entries[] = array("level" => 2, "position" => strlen($str), "title" => $data, "id" => $id);
+					$str .= "<h2 id='" . $id . "'>".$data."</h2>";
 					break;
 				case self::H3:
-					$entries[] = array("level" => 3, "position" => strlen($str), "title" => $data);
-					$str .= "<h3>".$data."</h3>";
+					$entries[] = array("level" => 3, "position" => strlen($str), "title" => $data, "id" => $id);
+					$str .= "<h3 id='" . $id . "'>".$data."</h3>";
 					break;
 				case self::IMAGE:
 					$str .= "<img recindex=".str_pad($data+1, 10, "0", STR_PAD_LEFT)." />";
@@ -83,8 +83,7 @@ class MOBIFile extends ContentProvider {
 		$toc .= "<blockquote><table summary='Table of Contents'><col/><tbody>";
 		for($i = 0, $len = sizeof($entries); $i < $len; $i++){
 			$entry = $entries[$i];
-			$title = urlencode(ereg_replace("[^A-Za-z0-9]", "", strtolower($entry["title"])));
-			$toc .= "<tr><td><a href='#".$title."'>".$entry["title"]."</a></td></tr>";
+			$toc .= "<tr><td><a href='#".$entry["id"]."'>".$entry["title"]."</a></td></tr>";
 		}
 		return $toc."</tbody></b></table></blockquote>";
 	}
