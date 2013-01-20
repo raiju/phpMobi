@@ -143,7 +143,7 @@ class MOBIFile extends ContentProvider {
 	}
 	
 	public function appendPageBreak() {
-		$this->parts[] = array(self::PAGEBREAK);
+		$this->parts[] = array(self::PAGEBREAK, null);
 	}
 
 	/**
