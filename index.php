@@ -60,6 +60,7 @@ if(isset($_GET["download"])){
 		$content->appendImage($im);
 		imagedestroy($im);
 		
+		$content->appendPageBreak();
 		
 		for($i = 0, $lenI = rand(10, 15); $i < $lenI; $i++){
 			$content->appendChapterTitle(($i+1).". Chapter ".($i+1));
@@ -67,6 +68,8 @@ if(isset($_GET["download"])){
 			for($j = 0, $lenJ = rand(20, 40); $j < $lenJ; $j++){
 				$content->appendParagraph("P".($i+1).".".($j+1)." TEXT TEXT TEXT");
 			}
+			
+			$content->appendPageBreak();
 		} 
 	
 		$mobi->setContentProvider($content);
