@@ -30,7 +30,6 @@ class MOBIFile extends ContentProvider {
 		if($this->settings["toc"]) {
 			$toc = $this->generateTOC($entries); //Generate TOC to get the right length
 			$toc = $this->generateTOC($entries, strlen($prefix)+strlen($toc)+strlen($title)); //Generate the real TOC
-			$toc .= '<mbp:pagebreak/>';
 		}
 
 		$suffix = "</body></html>";
@@ -83,9 +82,10 @@ class MOBIFile extends ContentProvider {
 		$toc .= "<blockquote><table summary='Table of Contents'><col/><tbody>";
 		for($i = 0, $len = sizeof($entries); $i < $len; $i++){
 			$entry = $entries[$i];
-			$toc .= "<tr><td><a href='#".$entry["id"]."'>".$entry["title"]."</a></td></tr>";
+			$pos = str_pad($entry["position"]+$base, 10, "0", STR_PAD_LEFT);
+			$toc .= "<tr><td><a href='#".$entry["id"]."' filepos='".$pos."'>".$entry["title"]."</a></td></tr>";
 		}
-		return $toc."</tbody></b></table></blockquote>";
+		return $toc."</tbody></b></table></blockquote><mbp:pagebreak/>";
 	}
 	
 	/**
