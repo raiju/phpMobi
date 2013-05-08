@@ -5,12 +5,11 @@ phpMobi is a php script that can generate .mobi files from valid html
 files. While this was meant as an experiment, this tool works quite
 well and can be used to generate mobipocket files from most news articles.
 
-IMPORTANT: Do NOT use this on a public web server. If you do, make sure the input is
-controlled (this script is absolutely not made to resist malicious inputs)
-and that the server isn't overwhelmed by the requests as this script is
-relatively heavy. Also, as no official documentation is available, there
-might be some bugs/problems in the generated files, but until now I haven't
-encountered any problems.
+IMPORTANT: Do NOT use this on a public web server: most of it was coded in
+a weekend, with no testing and no special attention to security. Also, as no official
+documentation for the MOBI file format is available, there will be some bugs/problems
+in the generated files, but it works for relatively simple documents on the Kindle
+previewer and the Kindle 3.
 
 MobiPocket is an eBook format created by Mobipocket SA. This tool also
 uses a php readability port made by [Keyvan Minoukadeh](http://www.keyvan.net/2010/08/php-readability/).
@@ -79,17 +78,15 @@ Image support:
 	into the mobi file.
 
 Partial UTF-8 support:
-	In practice UTF-8 just works, but theoretically there might be some
-	problems (see missing features).
+	In practice UTF-8 just works, but there are some unhandled corner
+	cases (see missing features).
 
 Missing Features
 ----------------
 
 Compression:
-	This probably won't be implemented (or if it is, only to serve as a
-	reference of the format) as PHP really isn't made for this kind of
-	work and the compression isn't really useful anymore with current
-	download speeds and storage space.
+	This won't be implemented (or if it is, only to serve as a
+	reference of the format).
 
 Different eBook types:
 	MobiPocket supports other formats/layouts, such as newspaper-like
@@ -98,9 +95,7 @@ Different eBook types:
 Full UTF-8 support:
 	UTF-8 should work most of the time (it worked every time I
 	tested it), but there might be some problems when the character
-	is split over two "records". In practice I've never encountered
-	this problem and special characters (and international characters,
-	such as japanese letters) are shown without a problem on my Kindle.
+	is split over two "records".
 
 License
 -------
