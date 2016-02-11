@@ -29,7 +29,7 @@ class MOBIFile extends ContentProvider {
 		
 		if($this->settings["toc"]) {
 			$toc = $this->generateTOC($entries); //Generate TOC to get the right length
-			$toc = $this->generateTOC($entries, strlen($prefix)+strlen($toc)+strlen($title)); //Generate the real TOC
+			$toc = $this->generateTOC($entries, strlen($prefix)+mb_strlen($toc, 'UTF-8')+mb_strlen($title, 'UTF-8')); //Generate the real TOC
 		}
 
 		$suffix = "</body></html>";
@@ -57,11 +57,11 @@ class MOBIFile extends ContentProvider {
 					$str .= '<mbp:pagebreak/>';
 					break;
 				case self::H2:
-					$entries[] = array("level" => 2, "position" => strlen($str), "title" => $data, "id" => $id);
+					$entries[] = array("level" => 2, "position" => mb_strlen($str, 'UTF-8'), "title" => $data, "id" => $id);
 					$str .= "<h2 id='" . $id . "'>".$data."</h2>";
 					break;
 				case self::H3:
-					$entries[] = array("level" => 3, "position" => strlen($str), "title" => $data, "id" => $id);
+					$entries[] = array("level" => 3, "position" => mb_strlen($str, 'UTF-8'), "title" => $data, "id" => $id);
 					$str .= "<h3 id='" . $id . "'>".$data."</h3>";
 					break;
 				case self::IMAGE:
