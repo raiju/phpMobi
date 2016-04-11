@@ -34,6 +34,9 @@ class RecordFactory {
 		$dataEntries = mb_str_split($data, $size);
 
 		for($i = 0, $len = sizeof($dataEntries); $i < $len; $i++){
+			$cur = $dataEntries[$i];
+			
+			$dataEntries[$i] = $cur;
 			$records[$i] = new Record($dataEntries[$i]);
 			$records[$i]->compress($compression);
 		}
@@ -96,18 +99,36 @@ class RecordFactory {
 		return $out;
 	}
 }
+
+/**
+ * Split string in chunks of at most split_length bytes, while respecting multi-byte
+ * character boundaries.
+ */
 function mb_str_split($string, $split_length = 1){
 	mb_internal_encoding('UTF-8');
 	mb_regex_encoding('UTF-8');
 
 	$split_length = ($split_length <= 0) ? 1 : $split_length;
 
-	$mb_strlen = mb_strlen($string, 'utf-8');
+	$bytes = strlen($string);
 
 	$array = array();
-
-	for($i = 0; $i < $mb_strlen; $i += $split_length){
-		$array[] = mb_substr($string, $i, $split_length);
+	
+	if ($split_length >= $bytes) {
+		$array[] = $string;
+		return $array;
+	}
+	
+	$i = 0;
+	while ($i < $bytes) {
+		$cut_string = mb_strcut($string, $i, $split_length);
+		$n_bytes = strlen($cut_string);
+		
+		if ($n_bytes == 0) {
+			throw new Exception('Inifite loop in string split detected.');
+		}
+		$array[] = $cut_string;
+		$i += strlen($cut_string);
 	}
 
 	return $array;

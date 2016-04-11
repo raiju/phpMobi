@@ -29,7 +29,13 @@ class MOBIFile extends ContentProvider {
 		
 		if($this->settings["toc"]) {
 			$toc = $this->generateTOC($entries); //Generate TOC to get the right length
-			$toc = $this->generateTOC($entries, strlen($prefix)+strlen($toc)+strlen($title)); //Generate the real TOC
+			$tocv2 = $this->generateTOC($entries, strlen($prefix)+strlen($toc)+strlen($title)); //Generate the real TOC
+			
+			if (strlen($toc) != strlen($tocv2)) {
+				throw new Exception("Error while generating TOC");
+			}
+			
+			$toc = $tocv2;
 		}
 
 		$suffix = "</body></html>";
@@ -43,33 +49,40 @@ class MOBIFile extends ContentProvider {
 	 * contains the level, the title and the position of the titles.
 	 */
 	public function generateText(){
-		$str = "";
+		$str = array();
 		$entries = array();
+		
+		$length_until_now = 0;
 		
 		for($i = 0; $i < sizeof($this->parts); $i++){
 			list($type, $data) = $this->parts[$i];
 			$id = "title_".$i;
+			
+			$cur_str = "";
 			switch($type){
 				case self::PARAGRAPH:
-					$str .= "<p>".$data."</p>";
+					$cur_str = "<p>".$data."</p>";
 					break;
 				case self::PAGEBREAK:
-					$str .= '<mbp:pagebreak/>';
+					$cur_str = '<mbp:pagebreak/>';
 					break;
 				case self::H2:
-					$entries[] = array("level" => 2, "position" => strlen($str), "title" => $data, "id" => $id);
-					$str .= "<h2 id='" . $id . "'>".$data."</h2>";
+					$entries[] = array("level" => 2, "position" => $length_until_now, "title" => $data, "id" => $id);
+					$cur_str = "<a name='".$id."'></a><h2 id='" . $id . "'>".$data."</h2>";
 					break;
 				case self::H3:
-					$entries[] = array("level" => 3, "position" => strlen($str), "title" => $data, "id" => $id);
-					$str .= "<h3 id='" . $id . "'>".$data."</h3>";
+					$entries[] = array("level" => 3, "position" => $length_until_now, "title" => $data, "id" => $id);
+					$cur_str = "<h3 id='" . $id . "'>".$data."</h3>";
 					break;
 				case self::IMAGE:
-					$str .= "<img recindex=".str_pad($data+1, 10, "0", STR_PAD_LEFT)." />";
+					$cur_str = "<img recindex=".str_pad($data+1, 10, "0", STR_PAD_LEFT)." />";
 					break;
 			}
+			
+			$length_until_now += strlen($cur_str);
+			$str[] = $cur_str;
 		}
-		return array($str, $entries);
+		return array(implode("", $str), $entries);
 	}
 	
 	/**
@@ -83,9 +96,11 @@ class MOBIFile extends ContentProvider {
 		for($i = 0, $len = sizeof($entries); $i < $len; $i++){
 			$entry = $entries[$i];
 			$pos = str_pad($entry["position"]+$base, 10, "0", STR_PAD_LEFT);
-			$toc .= "<tr><td><a href='#".$entry["id"]."' filepos='".$pos."'>".$entry["title"]."</a></td></tr>";
+			$toc .= "<tr><td><a href='#".$entry["id"]."' filepos=".$pos.">".$entry["title"]."</a></td></tr>";
 		}
-		return $toc."</tbody></b></table></blockquote><mbp:pagebreak/>";
+		$toc .= "</tbody></b></table></blockquote><mbp:pagebreak/>";
+		
+		return $toc;
 	}
 	
 	/**
