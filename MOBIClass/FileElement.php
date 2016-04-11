@@ -66,11 +66,11 @@ class FileElement {
 	}
 
 	public function serialize() {
-		$result = "";
+		$result = array();
 		foreach($this->elements as $val){
-			$result .= $val->serialize();
+			$result[] = $val->serialize();
 		}
-		return $result;
+		return implode("", $result);
 	}
 
 	public function unserialize($data) {
